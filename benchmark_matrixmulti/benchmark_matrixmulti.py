@@ -20,10 +20,6 @@ sys.path.append(os.path.dirname(__file__))
 from chrisapp.base import ChrisApp
 
 Gstr_title = """
-Generate a title from 
-http://patorjk.com/software/taag/#p=display&f=Doom&t=benchmark_matrixmulti
-"""
-Gstr_title = """
                  _        _                        _ _   _       _ _           _   _             
                 | |      (_)                      | | | (_)     | (_)         | | (_)            
  _ __ ___   __ _| |_ _ __ ___  __  _ __ ___  _   _| | |_ _ _ __ | |_  ___ __ _| |_ _  ___  _ __  
