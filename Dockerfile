@@ -32,7 +32,15 @@ COPY ["requirements.txt", "${APPROOT}"]
 
 WORKDIR $APPROOT
 
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN apt-get update \
+  && apt-get install sudo                                             \
+  && useradd -u $UID -ms /bin/bash localuser                          \
+  && addgroup localuser sudo                                          \
+  && echo "localuser:localuser" | chpasswd                            \
+  && adduser localuser sudo                                           \
+  && apt-get install -y libssl-dev libcurl4-openssl-dev bsdmainutils vim net-tools inetutils-ping \
+  && apt-get install python3-webob                                    \
+  && apt install -y python3-tk     				      \
+  && pip install -r requirements.txt 
 
 CMD ["benchmark_matrixmulti.py", "--help"]
