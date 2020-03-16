@@ -1,4 +1,4 @@
-#!/usr/bin/env python                                            
+#!/usr/bin/env python
 #
 # benchmark_matrixmulti ds ChRIS plugin app
 #
@@ -12,33 +12,38 @@
 
 import os
 import sys
+import MatMulBench
+
+
 sys.path.append(os.path.dirname(__file__))
 
 # import the Chris app superclass
 from chrisapp.base import ChrisApp
 
-
 Gstr_title = """
-
 Generate a title from 
 http://patorjk.com/software/taag/#p=display&f=Doom&t=benchmark_matrixmulti
-
+"""
+Gstr_title = """
+                 _        _                        _ _   _       _ _           _   _             
+                | |      (_)                      | | | (_)     | (_)         | | (_)            
+ _ __ ___   __ _| |_ _ __ ___  __  _ __ ___  _   _| | |_ _ _ __ | |_  ___ __ _| |_ _  ___  _ __  
+| '_ ` _ \ / _` | __| '__| \ \/ / | '_ ` _ \| | | | | __| | '_ \| | |/ __/ _` | __| |/ _ \| '_ \ 
+| | | | | | (_| | |_| |  | |>  <  | | | | | | |_| | | |_| | |_) | | | (_| (_| | |_| | (_) | | | |
+|_| |_| |_|\__,_|\__|_|  |_/_/\_\ |_| |_| |_|\__,_|_|\__|_| .__/|_|_|\___\__,_|\__|_|\___/|_| |_|
+                              ______                      | |                                    
+                             |______|                     |_|                                    
 """
 
 Gstr_synopsis = """
-
 (Edit this in-line help for app specifics. At a minimum, the 
 flags below are supported -- in the case of DS apps, both
 positional arguments <inputDir> and <outputDir>; for FS apps
 only <outputDir> -- and similarly for <in> <out> directories
 where necessary.)
-
     NAME
-
        benchmark_matrixmulti.py 
-
     SYNOPSIS
-
         python benchmark_matrixmulti.py                                         \\
             [-h] [--help]                                               \\
             [--json]                                                    \\
@@ -49,42 +54,33 @@ where necessary.)
             [--version]                                                 \\
             <inputDir>                                                  \\
             <outputDir> 
-
     BRIEF EXAMPLE
-
         * Bare bones execution
-
             mkdir in out && chmod 777 out
             python benchmark_matrixmulti.py   \\
                                 in    out
-
     DESCRIPTION
-
         `benchmark_matrixmulti.py` ...
-
     ARGS
-
         [-h] [--help]
         If specified, show help message and exit.
-        
+
         [--json]
         If specified, show json representation of app and exit.
-        
+
         [--man]
         If specified, print (this) man page and exit.
-
         [--meta]
         If specified, print plugin meta data and exit.
-        
+
         [--savejson <DIR>] 
         If specified, save json representation file to DIR and exit. 
-        
+
         [-v <level>] [--verbosity <level>]
         Verbosity level for app. Not used currently.
-        
+
         [--version]
         If specified, print version number and exit. 
-
 """
 
 
@@ -92,26 +88,26 @@ class Benchmark_matrixmulti(ChrisApp):
     """
     An app to ....
     """
-    AUTHORS                 = 'kefan (kefan29@bu.edu)'
-    SELFPATH                = os.path.dirname(os.path.abspath(__file__))
-    SELFEXEC                = os.path.basename(__file__)
-    EXECSHELL               = 'python3'
-    TITLE                   = 'A ChRIS plugin app'
-    CATEGORY                = ''
-    TYPE                    = 'ds'
-    DESCRIPTION             = 'An app to ...'
-    DOCUMENTATION           = 'http://wiki'
-    VERSION                 = '0.1'
-    ICON                    = '' # url of an icon image
-    LICENSE                 = 'Opensource (MIT)'
-    MAX_NUMBER_OF_WORKERS   = 1  # Override with integer value
-    MIN_NUMBER_OF_WORKERS   = 1  # Override with integer value
-    MAX_CPU_LIMIT           = '' # Override with millicore value as string, e.g. '2000m'
-    MIN_CPU_LIMIT           = '' # Override with millicore value as string, e.g. '2000m'
-    MAX_MEMORY_LIMIT        = '' # Override with string, e.g. '1Gi', '2000Mi'
-    MIN_MEMORY_LIMIT        = '' # Override with string, e.g. '1Gi', '2000Mi'
-    MIN_GPU_LIMIT           = 0  # Override with the minimum number of GPUs, as an integer, for your plugin
-    MAX_GPU_LIMIT           = 0  # Override with the maximum number of GPUs, as an integer, for your plugin
+    AUTHORS = 'kefan (kefan29@bu.edu)'
+    SELFPATH = os.path.dirname(os.path.abspath(__file__))
+    SELFEXEC = os.path.basename(__file__)
+    EXECSHELL = 'python3'
+    TITLE = 'A ChRIS plugin app'
+    CATEGORY = ''
+    TYPE = 'ds'
+    DESCRIPTION = 'An app to ...'
+    DOCUMENTATION = 'http://wiki'
+    VERSION = '0.1'
+    ICON = ''  # url of an icon image
+    LICENSE = 'Opensource (MIT)'
+    MAX_NUMBER_OF_WORKERS = 1  # Override with integer value
+    MIN_NUMBER_OF_WORKERS = 1  # Override with integer value
+    MAX_CPU_LIMIT = ''  # Override with millicore value as string, e.g. '2000m'
+    MIN_CPU_LIMIT = ''  # Override with millicore value as string, e.g. '2000m'
+    MAX_MEMORY_LIMIT = ''  # Override with string, e.g. '1Gi', '2000Mi'
+    MIN_MEMORY_LIMIT = ''  # Override with string, e.g. '1Gi', '2000Mi'
+    MIN_GPU_LIMIT = 0  # Override with the minimum number of GPUs, as an integer, for your plugin
+    MAX_GPU_LIMIT = 0  # Override with the maximum number of GPUs, as an integer, for your plugin
 
     # Use this dictionary structure to provide key-value output descriptive information
     # that may be useful for the next downstream plugin. For example:
@@ -131,6 +127,18 @@ class Benchmark_matrixmulti(ChrisApp):
         Define the CLI arguments accepted by this plugin app.
         Use self.add_argument to specify a new app argument.
         """
+        self.add_argument('-C', '--COE',
+                          dest='COEnumber',
+                          type=int,
+                          optional=True,
+                          help="assign COE parameter",
+                          default='128')
+        self.add_argument('-t', '--timeSpent',
+                          dest='ElapseTime',
+                          type=bool,
+                          optional=True,
+                          help="elapse time",
+                          default='True')
 
     def run(self, options):
         """
@@ -138,6 +146,17 @@ class Benchmark_matrixmulti(ChrisApp):
         """
         print(Gstr_title)
         print('Version: %s' % self.get_version())
+        Matrix_Multiply = MatMulBench.MatMulBench(
+            COEnumber=options.COEnumber,  # args.COEnumber,
+            ElapseTime=options.ElapseTime  # args.ElapseTime
+        )
+        d_MatrixMultiply = Matrix_Multiply.Run()
+
+        # has to be directed to the output directory
+        if options.ElapseTime == 'True':
+            f = open("./out/output.txt", "w+")
+            f.write(d_MatrixMultiply)
+            f.close()
 
     def show_man_page(self):
         """
